@@ -28,11 +28,6 @@ public class MovieService {
         return movieRepository.findById(id).map(MovieDtoMapper::map);
     }
 
-    public List<MovieDto> findMoviesByGenreName(String genre) {
-        return movieRepository.findAllByGenre_NameIgnoreCase(genre).stream()
-                .map(MovieDtoMapper::map)
-                .toList();
-    }
 
     public Movie addMovie(MovieSaveDto movieToSave) {
         Movie movie = new Movie();
@@ -44,10 +39,6 @@ public class MovieService {
         movie.setDescription(movieToSave.getDescription());
         movie.setYoutubeTrailerId(movieToSave.getYoutubeTrailerId());
 
-        if (movieToSave.getPoster() != null) {
-            String savedFileName = fileStorageService.saveImage(movieToSave.getPoster());
-            movie.setPoster(savedFileName);
-        }
         return movieRepository.save(movie);
     }
 

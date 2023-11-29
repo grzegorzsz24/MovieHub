@@ -10,6 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     List<Movie> findAllByPromotedIsTrue();
-    List<Movie> findAllByGenre_NameIgnoreCase(String genre);
     Optional<Movie> findByTitle(String title);
 }
