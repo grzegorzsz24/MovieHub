@@ -25,6 +25,12 @@ public class MovieController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/top10")
+    public ResponseEntity<List<MovieDto>> findTop10() {
+        return ResponseEntity.ok(movieService.findTopMovies(10));
+    }
+
     @GetMapping("/filters")
     public ResponseEntity<List<MovieDto>> findMovies(@RequestParam(required = false) String genre,
                                                      @RequestParam(required = false) Integer releaseYear,
@@ -33,4 +39,3 @@ public class MovieController {
         return ResponseEntity.ok(movieService.findAllWithFilters(genre, releaseYear, page - 1));
     }
 }
-

@@ -52,4 +52,3 @@ public class GenreService {
         genreRepository.deleteById(id);
     }
 }
-

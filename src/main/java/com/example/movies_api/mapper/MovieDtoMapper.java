@@ -4,10 +4,14 @@ import com.example.movies_api.dto.MovieDto;
 import com.example.movies_api.dto.MovieGenresDto;
 import com.example.movies_api.model.Genre;
 import com.example.movies_api.model.Movie;
+import com.example.movies_api.model.Rating;
 import com.example.movies_api.repository.GenreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.OptionalDouble;
+import java.util.Set;
 
 
 @Component
@@ -25,6 +29,20 @@ public class MovieDtoMapper {
             movieDto.setGenre("Brak informacji");
         }
 
+        Set<Rating> ratings = movie.getRatings();
+        if (ratings != null && !ratings.isEmpty()) {
+            OptionalDouble avgRating = ratings.stream()
+                    .mapToDouble(Rating::getRating)
+                    .average();
+
+            movieDto.setAvgRating(avgRating.orElse(0.0));
+
+            movieDto.setRatingCount(ratings.size());
+        } else {
+            movieDto.setAvgRating(0.0);
+            movieDto.setRatingCount(0);
+        }
+
         return movieDto;
     }
 
@@ -33,6 +51,7 @@ public class MovieDtoMapper {
         BeanUtils.copyProperties(movieDto, movie);
         Genre genre = genreRepository.findByNameIgnoreCase(movieDto.getGenre()).get();
         movie.setGenre(genre);
+        movie.setRatings(movieDto.getRatings());
         return movie;
     }
 

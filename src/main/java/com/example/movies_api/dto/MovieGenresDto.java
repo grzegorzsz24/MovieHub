@@ -1,7 +1,10 @@
 package com.example.movies_api.dto;
 
+import com.example.movies_api.model.Rating;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,4 +19,5 @@ public class MovieGenresDto {
     private String genre;
     private boolean promoted;
     private String poster;
+    private Set<Rating> ratings;
 }
