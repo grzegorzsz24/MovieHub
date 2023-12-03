@@ -20,5 +20,9 @@ public class UserRole {
     private Long id;
     private String name;
     private String description;
+
+    public UserRole(String name) {
+        this.name = name;
+    }
 }
 

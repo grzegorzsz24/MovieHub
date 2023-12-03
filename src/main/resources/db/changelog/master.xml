@@ -11,5 +11,8 @@
         <include file="0004_create_table_movie_rating.xml" relativeToChangelogFile="true"/>
         <include file="0005_create_table_movie_comment.xml" relativeToChangelogFile="true"/>
 
+        <include file="../testdata/0001_genres.sql" relativeToChangelogFile="true" context="dev"/>
+        <include file="../testdata/0002_movies.sql" relativeToChangelogFile="true" context="dev"/>
+
 
 </databaseChangeLog>

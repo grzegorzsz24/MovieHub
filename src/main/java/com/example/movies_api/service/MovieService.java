@@ -56,6 +56,10 @@ public class MovieService {
         movie.setYoutubeTrailerId(movieToSave.getYoutubeTrailerId());
         Genre genre = genreRepository.findByNameIgnoreCase(movieToSave.getGenre()).orElseThrow();
         movie.setGenre(genre);
+        if (movieToSave.getPoster() != null) {
+            String savedFileName = fileStorageService.saveImage(movieToSave.getPoster());
+            movie.setPoster(savedFileName);
+        }
         return movieRepository.save(movie);
     }
 
