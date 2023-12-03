@@ -1,9 +1,6 @@
 package com.example.movies_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -22,6 +19,9 @@ public class Movie {
     private String description;
     private String youtubeTrailerId;
     private Integer releaseYear;
+    @ManyToOne
+    @JoinColumn(name = "genre_id", referencedColumnName = "id")
+    private Genre genre;
     private boolean promoted;
     private String poster;
 }

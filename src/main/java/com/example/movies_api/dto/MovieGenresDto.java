@@ -1,13 +1,11 @@
 package com.example.movies_api.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @Getter
 @Setter
-public class MovieDto {
+public class MovieGenresDto {
     private Long id;
     private String title;
     private String originalTitle;
@@ -18,7 +16,4 @@ public class MovieDto {
     private String genre;
     private boolean promoted;
     private String poster;
-    private double avgRating;
-    private int ratingCount;
 }
-
