@@ -52,6 +52,28 @@ public class MovieServiceTest {
         assertEquals(expectedMovieDtos.size(), actualMovieDtos.size());
     }
 
+    @Test
+    void givenMovieList_whenFindTopMovies_thenReturnMovieDtoListWithExpectedSize() {
+        List<Movie> movies = createMovies();
+        when(movieRepository.findTopByRating(PageRequest.of(0, 5))).thenReturn(movies);
+
+        List<MovieDto> expectedMovieDtos = movies.stream()
+                .map(MovieDtoMapper::map)
+                .toList();
+        List<MovieDto> actualMovieDtos = movieService.findTopMovies(5);
+
+        assertEquals(expectedMovieDtos.size(), actualMovieDtos.size());
+    }
+
+    @Test
+    public void givenGenreName_whenFindMoviesByGenre_thenReturnListOfMoviesWithMatchingSize() {
+        String genre = "Action";
+        List<Movie> movies = createMovies();
+        when(movieRepository.findAllByGenre_NameIgnoreCase(genre)).thenReturn(movies);
+        List<MovieDto> actualMovieDtos = movieService.findMoviesByGenreName(genre);
+        assertEquals(movies.size(), actualMovieDtos.size());
+    }
+
     private static List<Movie> createMovies() {
         List<Movie> promotedMovies = new ArrayList<>();
         promotedMovies.add(Movie.builder()
