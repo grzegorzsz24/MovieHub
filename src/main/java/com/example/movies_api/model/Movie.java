@@ -3,6 +3,9 @@ package com.example.movies_api.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -24,4 +27,6 @@ public class Movie {
     private Genre genre;
     private boolean promoted;
     private String poster;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
+    private Set<Rating> ratings = new HashSet<>();
 }
