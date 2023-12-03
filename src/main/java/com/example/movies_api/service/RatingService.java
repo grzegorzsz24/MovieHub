@@ -1,5 +1,7 @@
 package com.example.movies_api.service;
 
+import com.example.movies_api.dto.RatingDto;
+import com.example.movies_api.mapper.RatingDtoMapper;
 import com.example.movies_api.model.Movie;
 import com.example.movies_api.model.Rating;
 import com.example.movies_api.model.User;
@@ -18,7 +20,7 @@ public class RatingService {
     private final UserRepository userRepository;
     private final MovieRepository movieRepository;
 
-    public Rating addOrUpdateRating(String userEmail, long movieId, int rating) {
+    public RatingDto addOrUpdateRating(String userEmail, long movieId, int rating) {
         Rating ratingToSaveOrUpdate = ratingRepository.findByUser_EmailAndMovie_Id(userEmail, movieId)
                 .orElseGet(Rating::new);
         User user = userRepository.findByEmail(userEmail).orElseThrow();
@@ -27,7 +29,7 @@ public class RatingService {
         ratingToSaveOrUpdate.setMovie(movie);
         ratingToSaveOrUpdate.setRating(rating);
         ratingRepository.save(ratingToSaveOrUpdate);
-        return ratingToSaveOrUpdate;
+        return RatingDtoMapper.map(ratingToSaveOrUpdate);
     }
 
     public Optional<Integer> getUserRatingForMovie(String userEmail, long movieId) {

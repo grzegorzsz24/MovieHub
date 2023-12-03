@@ -1,6 +1,6 @@
 package com.example.movies_api.controller;
 
-import com.example.movies_api.model.Comment;
+import com.example.movies_api.dto.CommentDto;
 import com.example.movies_api.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,9 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/add-comment")
-    public ResponseEntity<Comment> addComment(@RequestParam long movieId, @RequestParam String commentContent) {
+    public ResponseEntity<CommentDto> addComment(@RequestParam long movieId, @RequestParam String commentContent) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Comment savedComment = commentService.addOrUpdateComment(currentUserEmail, movieId, commentContent);
+        CommentDto savedComment = commentService.addOrUpdateComment(currentUserEmail, movieId, commentContent);
         URI savedCommentUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(savedComment.getId())

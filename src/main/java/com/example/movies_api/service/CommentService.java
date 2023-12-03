@@ -1,5 +1,7 @@
 package com.example.movies_api.service;
 
+import com.example.movies_api.dto.CommentDto;
+import com.example.movies_api.mapper.CommentDtoMapper;
 import com.example.movies_api.model.Comment;
 import com.example.movies_api.model.Movie;
 import com.example.movies_api.model.User;
@@ -16,7 +18,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final MovieRepository movieRepository;
 
-    public Comment addOrUpdateComment(String userEmail, long movieId, String commentContent) {
+    public CommentDto addOrUpdateComment(String userEmail, long movieId, String commentContent) {
         Comment commentToSaveOrUpdate = commentRepository.findByUser_EmailAndMovie_Id(userEmail, movieId)
                 .orElseGet(Comment::new);
         User user = userRepository.findByEmail(userEmail).orElseThrow();
@@ -25,7 +27,7 @@ public class CommentService {
         commentToSaveOrUpdate.setMovie(movie);
         commentToSaveOrUpdate.setContent(commentContent);
         commentRepository.save(commentToSaveOrUpdate);
-        return commentToSaveOrUpdate;
+        return CommentDtoMapper.map(commentToSaveOrUpdate);
     }
 
     public void deleteComment(long id) {

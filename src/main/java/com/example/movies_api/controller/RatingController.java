@@ -1,6 +1,6 @@
 package com.example.movies_api.controller;
 
-import com.example.movies_api.model.Rating;
+import com.example.movies_api.dto.RatingDto;
 import com.example.movies_api.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class RatingController {
     private final RatingService ratingService;
 
     @PostMapping("/rate-movie")
-    public ResponseEntity<Rating> addRating(@RequestParam long movieId, @RequestParam int rating) {
+    public ResponseEntity<RatingDto> addRating(@RequestParam long movieId, @RequestParam int rating) {
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-        Rating savedRating = ratingService.addOrUpdateRating(currentUserEmail, movieId, rating);
+        RatingDto savedRating = ratingService.addOrUpdateRating(currentUserEmail, movieId, rating);
         URI savedRatingUri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(savedRating.getId())

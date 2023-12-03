@@ -21,5 +21,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query("select m from Movie m join m.ratings r group by m order by avg(r.rating) desc")
     List<Movie> findTopByRating(Pageable page);
+
     Optional<Movie> findByTitle(String title);
 }
