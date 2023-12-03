@@ -52,6 +52,12 @@ public class MovieServiceTest {
         assertEquals(expectedMovieDtos.size(), actualMovieDtos.size());
     }
 
+    @Test
+    public void givenMovieId_whenDeleteMovie_thenVerifyDeletion() {
+        long movieIdToDelete = 1L;
+        movieService.deleteMovie(movieIdToDelete);
+        verify(movieRepository).deleteById(movieIdToDelete);
+    }
     private static List<Movie> createMovies() {
         List<Movie> promotedMovies = new ArrayList<>();
         promotedMovies.add(Movie.builder()
