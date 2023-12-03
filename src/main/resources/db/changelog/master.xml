@@ -13,6 +13,8 @@
 
         <include file="../testdata/0001_genres.sql" relativeToChangelogFile="true" context="dev"/>
         <include file="../testdata/0002_movies.sql" relativeToChangelogFile="true" context="dev"/>
-
+        <include file="../testdata/0003_users_and_roles.sql" relativeToChangelogFile="true" context="dev"/>
+        <include file="../testdata/0004_movie_ratings.sql" relativeToChangelogFile="true" context="dev"/>
+        <include file="../testdata/0005_movie_comments.sql" relativeToChangelogFile="true" context="dev"/>
 
 </databaseChangeLog>
