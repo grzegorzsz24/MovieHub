@@ -38,7 +38,7 @@ public class MovieManagementController {
     @PatchMapping("/update-movie/{id}")
     ResponseEntity<?> updateMovie(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
         try {
-            MovieGenresDto movieDto = movieService.findMovieDtoById(id).orElseThrow();
+            MovieGenresDto movieDto = movieService.findMovieDtoById(id);
             MovieGenresDto moviePatched = applyPatch(movieDto, patch);
             movieService.updateMovie(moviePatched);
 

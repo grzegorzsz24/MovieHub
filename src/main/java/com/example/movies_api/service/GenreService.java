@@ -2,6 +2,8 @@ package com.example.movies_api.service;
 
 
 import com.example.movies_api.dto.GenreDto;
+import com.example.movies_api.exception.BadRequestException;
+import com.example.movies_api.exception.ResourceNotFoundException;
 import com.example.movies_api.mapper.GenreDtoMapper;
 import com.example.movies_api.model.Genre;
 import com.example.movies_api.repository.GenreRepository;
@@ -19,9 +21,9 @@ public class GenreService {
     private final GenreRepository genreRepository;
     private final GenreDtoMapper genreDtoMapper;
 
-    public Optional<GenreDto> findGenreByName(String name) {
+    public GenreDto findGenreByName(String name) {
         return genreRepository.findByNameIgnoreCase(name)
-                .map(GenreDtoMapper::map);
+                .map(GenreDtoMapper::map).orElseThrow(() -> new ResourceNotFoundException("Genre not found"));
     }
 
     public List<GenreDto> findAllGenres() {
@@ -30,8 +32,10 @@ public class GenreService {
                 .toList();
     }
 
-    @Transactional
     public Genre addGenre(GenreDto genreDto) {
+        if (genreRepository.findByNameIgnoreCase(genreDto.getName()).isPresent()) {
+            throw new BadRequestException("Genre already exists");
+        }
         Genre genreToSave = new Genre();
         genreToSave.setName(genreDto.getName());
         genreToSave.setDescription(genreDto.getDescription());
@@ -39,8 +43,9 @@ public class GenreService {
         return genreToSave;
     }
 
-    public Optional<GenreDto> findGenreById(long id) {
-        return genreRepository.findById(id).map(GenreDtoMapper::map);
+    public GenreDto findGenreById(long id) {
+        return genreRepository.findById(id).map(GenreDtoMapper::map)
+                .orElseThrow(() -> new ResourceNotFoundException("Genre not found"));
     }
 
     public void updateGenre(GenreDto genreDto) {

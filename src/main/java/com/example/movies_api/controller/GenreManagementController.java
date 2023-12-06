@@ -36,7 +36,7 @@ public class GenreManagementController {
     @PatchMapping("/update_genre/{id}")
     ResponseEntity<?> updateGenre(@PathVariable Long id, @RequestBody JsonMergePatch patch) {
         try {
-            GenreDto genreDto = genreService.findGenreById(id).orElseThrow();
+            GenreDto genreDto = genreService.findGenreById(id);
             GenreDto genrePatched = applyPatch(genreDto, patch);
             genreService.updateGenre(genrePatched);
 

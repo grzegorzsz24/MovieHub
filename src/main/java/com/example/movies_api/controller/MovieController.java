@@ -21,9 +21,7 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovieDto> getMovie(@PathVariable long id) {
-        return movieService.findMovieById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(movieService.findMovieById(id));
     }
 
     @GetMapping("/top10")

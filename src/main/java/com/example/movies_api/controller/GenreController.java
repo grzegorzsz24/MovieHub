@@ -24,8 +24,7 @@ public class GenreController {
 
     @GetMapping("/{name}")
     public ResponseEntity<List<MovieDto>> getGenreMovies(@PathVariable String name) {
-        GenreDto genre = genreService.findGenreByName(name)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        GenreDto genre = genreService.findGenreByName(name);
         return ResponseEntity.ok(movieService.findMoviesByGenreName(name));
     }
 
