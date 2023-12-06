@@ -1,6 +1,7 @@
 package com.example.movies_api.service;
 
 import com.example.movies_api.dto.RatingDto;
+import com.example.movies_api.exception.ResourceNotFoundException;
 import com.example.movies_api.mapper.RatingDtoMapper;
 import com.example.movies_api.model.Movie;
 import com.example.movies_api.model.Rating;
@@ -23,17 +24,14 @@ public class RatingService {
     public RatingDto addOrUpdateRating(String userEmail, long movieId, int rating) {
         Rating ratingToSaveOrUpdate = ratingRepository.findByUser_EmailAndMovie_Id(userEmail, movieId)
                 .orElseGet(Rating::new);
-        User user = userRepository.findByEmail(userEmail).orElseThrow();
-        Movie movie = movieRepository.findById(movieId).orElseThrow();
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
         ratingToSaveOrUpdate.setUser(user);
         ratingToSaveOrUpdate.setMovie(movie);
         ratingToSaveOrUpdate.setRating(rating);
         ratingRepository.save(ratingToSaveOrUpdate);
         return RatingDtoMapper.map(ratingToSaveOrUpdate);
-    }
-
-    public Optional<Integer> getUserRatingForMovie(String userEmail, long movieId) {
-        return ratingRepository.findByUser_EmailAndMovie_Id(userEmail, movieId)
-                .map(Rating::getRating);
     }
 }

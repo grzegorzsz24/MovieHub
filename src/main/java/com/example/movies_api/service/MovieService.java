@@ -3,6 +3,8 @@ package com.example.movies_api.service;
 import com.example.movies_api.dto.MovieDto;
 import com.example.movies_api.dto.MovieGenresDto;
 import com.example.movies_api.dto.MovieSaveDto;
+import com.example.movies_api.exception.BadRequestException;
+import com.example.movies_api.exception.ResourceNotFoundException;
 import com.example.movies_api.mapper.MovieDtoMapper;
 import com.example.movies_api.model.Genre;
 import com.example.movies_api.model.Movie;
@@ -31,12 +33,14 @@ public class MovieService {
                 .toList();
     }
 
-    public Optional<MovieDto> findMovieById(long id) {
-        return movieRepository.findById(id).map(MovieDtoMapper::map);
+    public MovieDto findMovieById(long id) {
+        return movieRepository.findById(id).map(MovieDtoMapper::map)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
     }
 
-    public Optional<MovieGenresDto> findMovieDtoById(long id) {
-        return movieRepository.findById(id).map(MovieDtoMapper::mapToDto);
+    public MovieGenresDto findMovieDtoById(long id) {
+        return movieRepository.findById(id).map(MovieDtoMapper::mapToDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
     }
 
     public List<MovieDto> findMoviesByGenreName(String genre) {
@@ -46,6 +50,9 @@ public class MovieService {
     }
 
     public Movie addMovie(MovieSaveDto movieToSave) {
+        if (movieRepository.findByTitle(movieToSave.getTitle()).isPresent()) {
+            throw new BadRequestException("Movie with this title already exists");
+        }
         Movie movie = new Movie();
         movie.setTitle(movieToSave.getTitle());
         movie.setOriginalTitle(movieToSave.getOriginalTitle());
@@ -54,7 +61,8 @@ public class MovieService {
         movie.setShortDescription(movieToSave.getShortDescription());
         movie.setDescription(movieToSave.getDescription());
         movie.setYoutubeTrailerId(movieToSave.getYoutubeTrailerId());
-        Genre genre = genreRepository.findByNameIgnoreCase(movieToSave.getGenre()).orElseThrow();
+        Genre genre = genreRepository.findByNameIgnoreCase(movieToSave.getGenre())
+                .orElseThrow(() -> new ResourceNotFoundException("Gennre not found"));
         movie.setGenre(genre);
         if (movieToSave.getPoster() != null) {
             String savedFileName = fileStorageService.saveImage(movieToSave.getPoster());
